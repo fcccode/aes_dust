@@ -25,7 +25,7 @@
   For more information, please refer to <http://unlicense.org/> */
   
 // AES-128/128 in ARM32 assembly
-// 376 bytes
+// 352 bytes
 
     .arch armv7-a
     .text
@@ -90,7 +90,6 @@ SB3:
 E:
     push    {r0-r12,lr}
     sub     sp, sp, #32
-    add     r1, sp, #16
     
     // copy plain text + master key to x
     // F(8)x[i]=((W*)s)[i];
@@ -104,7 +103,8 @@ E:
     // w=k[3];F(4)w=(w&-256)|S(w),w=R(w,8),((W*)s)[i]=x[i]^k[i];
 L0:
     mov     r2, #0
-    ldr     r10, [r1, #3*4]
+    ldr     r10, [sp, #16+3*4]
+    add     r1, sp, #16
 L1:
     bl      S
     ror     r10, r10, #8
@@ -120,14 +120,12 @@ L1:
     // AddRoundConstant, perform 2nd part of ExpandRoundKey
     // w=R(w,8)^c;F(4)w=k[i]^=w;
     eor     r10, r4, r10, ror #8
-    mov     r2, #0
 L2:
-    ldr     r7, [r1, r2, lsl #2]
+    ldr     r7, [r1]
     eor     r10, r10, r7
-    str     r10, [r1, r2, lsl #2]
-
-    add     r2, r2, #1
-    cmp     r2, #4
+    str     r10, [r1], #4
+    
+    subs    r2, r2, #1
     bne     L2
     
     // if round 11, stop; 
@@ -143,7 +141,6 @@ L2:
     
     // SubBytes and ShiftRows
     // F(16)((B*)x)[(i%4)+(((i/4)-(i%4))%4)*4]=S(s[i]);
-    mov     r2, #0
 L3:
     ldrb    r10, [r0, r2]
     bl      S
@@ -162,24 +159,20 @@ L3:
     // if not round 11, MixColumns
     // if(c!=108)
     cmp     r4, #108
+L4:
     beq     L0
+    subs    r2, r2, #4
 
     // F(4)w=x[i],x[i]=R(w,8)^R(w,16)^R(w,24)^M(R(w,8)^w);
-    mov     r2, #0
-L4:
-    ldr     r10, [sp, r2, lsl #2]
+    ldr     r10, [sp, r2]
     eor     r11, r10, r10, ror #8
     bl      M
-    eor     r11, r7, r10, ror #8
+    eor     r11, r7, r10,  ror #8
     eor     r11, r11, r10, ror #16
     eor     r11, r11, r10, ror #24
-    str     r11, [sp, r2, lsl #2]
+    str     r11, [sp, r2]
 
-    add     r2, r2, #1
-    cmp     r2, #4
-    bne     L4
-    
-    b       L0
+    b       L4
 L5:
     add     sp, sp, #32
     pop     {r0-r12,pc}
