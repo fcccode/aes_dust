@@ -50,7 +50,7 @@ M:
 S:
     str      lr, [sp, -16]!
     ands     w7, w13, 0xFF
-    beq      SB3
+    beq      SB2
 
     mov      w14, 1
     mov      w15, 1 
@@ -60,7 +60,6 @@ SB0:
     ccmp     w14, w7, 0, eq
     csel     w14, w15, w14, eq
     csel     w15, wzr, w15, eq 
-SB1:
     bl       M
     eor      w14, w14, w10
     subs     x3, x3, 1
@@ -68,13 +67,13 @@ SB1:
     
     and      w7, w14, 0xFF
     mov      x3, 4
-SB2:
+SB1:
     lsr      w10, w14, 7
     orr      w14, w10, w14, lsl 1
     eor      w7, w7, w14
     subs     x3, x3, 1
-    bne      SB2
-SB3:
+    bne      SB1
+SB2:
     mov      w10, 99
     eor      w7, w7, w10 
     bfxil    w13, w7, 0, 8

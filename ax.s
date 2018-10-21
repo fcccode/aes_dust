@@ -53,7 +53,7 @@ M:
 S:
     push     {lr}
     ands     r5, r10, #0xFF
-    beq      SB3
+    beq      SB2
 
     mov      r11, #1
     mov      r12, #0
@@ -63,7 +63,6 @@ SB0:
     cmpeq    r11, r5
     moveq    r11, #1
     moveq    r12, #1
-SB1:
     bl       M
     eor      r11, r11, r7
     subs     r3, r3, #1
@@ -71,13 +70,13 @@ SB1:
 
     and      r5, r11, #255
     mov      r3, #4
-SB2:
+SB1:
     lsr      r7, r11, #7
     orr      r11, r7, r11, lsl #1
     eor      r5, r5, r11
     subs     r3, r3, #1
-    bne      SB2
-SB3:
+    bne      SB1
+SB2:
     eor      r5, r5, #99
     uxtb     r5, r5
     bic      r10, r10, #255
