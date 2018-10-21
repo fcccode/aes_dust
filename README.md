@@ -74,7 +74,7 @@
   </tr>
   <tr>
     <td>ARM64</td>
-    <td>388</td>
+    <td>352</td>
     <td></td>
   </tr>
 </table>

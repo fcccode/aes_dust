@@ -25,7 +25,7 @@
   For more information, please refer to <http://unlicense.org/> */
 
 // AES-128/128 in ARM64 assembly
-// 356 bytes
+// 352 bytes
 
     .arch armv8-a
     .text
@@ -153,24 +153,22 @@ L3:
     cmp      x2, 16
     bne      L3
     
-    mov      x3, sp
- 
     // if (c != 108)
     cmp      w4, 108
 L4:
     beq      L0
+    subs     x2, x2, 4
     
     // MixColumns
     // F(4)w=x[i],x[i]=R(w,8)^R(w,16)^R(w,24)^M(R(w,8)^w);
-    ldr      w13, [x3]
+    ldr      w13, [sp, x2]
     eor      w14, w13, w13, ror 8
     bl       M
     eor      w14, w10, w13, ror 8
     eor      w14, w14, w13, ror 16
     eor      w14, w14, w13, ror 24
-    str      w14, [x3], 4
-
-    subs     x2, x2, 4 
+    str      w14, [sp, x2]
+    
     b        L4
 L5:
     add      sp, sp, 32
