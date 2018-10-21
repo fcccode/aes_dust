@@ -25,7 +25,7 @@
   For more information, please refer to <http://unlicense.org/> */
 
 // AES-128/128 in ARM64 assembly
-// 360 bytes
+// 356 bytes
 
     .arch armv8-a
     .text
@@ -49,18 +49,17 @@ M:
 // *****************************
 S:
     str      lr, [sp, -16]!
-    uxtb     w7, w13
-    cbz      w7, SB3
+    ands     w7, w13, 0xFF
+    beq      SB3
 
     mov      w14, 1
-    mov      w15, 0
+    mov      w15, 1 
     mov      x3, 0xFF
 SB0:
-    cmp      w15, 0
+    cmp      w15, 1 
     ccmp     w14, w7, 0, eq
-    bne      SB1
-    mov      w14, 1
-    mov      w15, 1
+    csel     w14, w15, w14, eq
+    csel     w15, wzr, w15, eq 
 SB1:
     bl       M
     eor      w14, w14, w10
@@ -149,6 +148,7 @@ L3:
     and      w11, w11, 3
     add      w10, w10, w11, lsl 2
     strb     w13, [sp, w10, uxtw]
+
     add      x2, x2, 1
     cmp      x2, 16
     bne      L3
@@ -169,6 +169,7 @@ L4:
     eor      w14, w14, w13, ror 16
     eor      w14, w14, w13, ror 24
     str      w14, [x3], 4
+
     subs     x2, x2, 4 
     b        L4
 L5:
