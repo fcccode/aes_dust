@@ -25,7 +25,7 @@
   For more information, please refer to <http://unlicense.org/> */
 
 // AES-128/128 in ARM64 assembly
-// 380 bytes
+// 360 bytes
 
     .arch armv8-a
     .text
@@ -64,11 +64,10 @@ SB0:
 SB1:
     bl       M
     eor      w14, w14, w10
-    uxtb     w14, w14
     subs     x3, x3, 1
     bne      SB0
     
-    mov      w7, w14
+    and      w7, w14, 0xFF
     mov      x3, 4
 SB2:
     lsr      w10, w14, 7
@@ -89,22 +88,22 @@ SB3:
 E:
     str      lr, [sp, -16]!
     sub      sp, sp, 32
-    add      x1, sp, 16
     
     // copy plain text + master key to x
     // F(8)x[i]=((W*)s)[i];
     ldp      x5, x6, [x0]
     ldp      x7, x8, [x0, 16]
     stp      x5, x6, [sp]
-    stp      x7, x8, [x1]
+    stp      x7, x8, [sp, 16]
     
     // c = 1
     mov      w4, 1
 L0:
     // AddRoundKey, 1st part of ExpandRoundKey
     // w=k[3];F(4)w=(w&-256)|S(w),w=R(w,8),((W*)s)[i]=x[i]^k[i];
-    mov      x2, 0
-    ldr      w13, [x1, 3*4]
+    mov      x2, xzr 
+    ldr      w13, [sp, 16+3*4]
+    add      x1, sp, 16
 L1:
     bl       S
     ror      w13, w13, 8
@@ -112,6 +111,7 @@ L1:
     ldr      w11, [x1, x2, lsl 2]
     eor      w10, w10, w11
     str      w10, [x0, x2, lsl 2]
+
     add      x2, x2, 1
     cmp      x2, 4
     bne      L1
@@ -119,13 +119,12 @@ L1:
     // AddRoundConstant, perform 2nd part of ExpandRoundKey
     // w=R(w,8)^c;F(4)w=k[i]^=w;
     eor      w13, w4, w13, ror 8
-    mov      x2, xzr
 L2:
-    ldr      w10, [x1, x2, lsl 2]
+    ldr      w10, [x1]
     eor      w13, w13, w10
-    str      w13, [x1, x2, lsl 2]
-    add      x2, x2, 1
-    cmp      x2, 4
+    str      w13, [x1], 4
+    
+    subs     x2, x2, 1
     bne      L2
     
     // if round 11, stop
@@ -141,7 +140,6 @@ L2:
     
     // SubBytes and ShiftRows
     // F(16)((B*)x)[(i%4)+(((i/4)-(i%4))%4)*4]=S(s[i]);
-    mov      x2, xzr
 L3:
     ldrb     w13, [x0, x2]
     bl       S
@@ -150,8 +148,7 @@ L3:
     sub      w11, w11, w10
     and      w11, w11, 3
     add      w10, w10, w11, lsl 2
-    uxtb     w10, w10
-    strb     w13, [sp, x10]
+    strb     w13, [sp, w10, uxtw]
     add      x2, x2, 1
     cmp      x2, 16
     bne      L3
