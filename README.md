@@ -69,7 +69,7 @@
   </tr>
   <tr>
     <td>ARM32</td>
-    <td>376</td>
+    <td>352</td>
     <td></td>
   </tr>
   <tr>
