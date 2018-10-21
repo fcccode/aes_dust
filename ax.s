@@ -112,6 +112,7 @@ L1:
     ldr     r8, [r1, r2, lsl #2]
     eor     r7, r7, r8
     str     r7, [r0, r2, lsl #2]
+
     add     r2, r2, #1
     cmp     r2, #4
     bne     L1
@@ -124,6 +125,7 @@ L2:
     ldr     r7, [r1, r2, lsl #2]
     eor     r10, r10, r7
     str     r10, [r1, r2, lsl #2]
+
     add     r2, r2, #1
     cmp     r2, #4
     bne     L2
@@ -152,6 +154,7 @@ L3:
     add     r7, r7, r8, lsl #2
     uxtb    r7, r7
     strb    r10, [sp, r7]
+
     add     r2, r2, #1
     cmp     r2, #16
     bne     L3
@@ -171,6 +174,7 @@ L4:
     eor     r11, r11, r10, ror #16
     eor     r11, r11, r10, ror #24
     str     r11, [sp, r2, lsl #2]
+
     add     r2, r2, #1
     cmp     r2, #4
     bne     L4
