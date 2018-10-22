@@ -24,7 +24,7 @@
 
   For more information, please refer to <http://unlicense.org/> */
   
-// AES-128/128 in ARM32 assembly
+// AES-128 Encryption in ARM32 assembly
 // 352 bytes
 
     .arch armv7-a
