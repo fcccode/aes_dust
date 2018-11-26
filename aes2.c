@@ -24,8 +24,6 @@
 
   For more information, please refer to <http://unlicense.org/> */
   
-#include <stdio.h>
-
 #define R(v,n)(((v)>>(n))|((v)<<(32-(n))))
 #define F(n)for(i=0;i<n;i++)
 typedef unsigned char B;
