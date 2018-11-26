@@ -24,6 +24,8 @@
 
   For more information, please refer to <http://unlicense.org/> */
   
+#include <stdio.h>
+
 #define R(v,n)(((v)>>(n))|((v)<<(32-(n))))
 #define F(n)for(i=0;i<n;i++)
 typedef unsigned char B;
@@ -45,31 +47,32 @@ B S(B x) {
 void E(B *s) {
     W i,r=0,w,x[12],c=1,*k=(W*)&x[4];
 
-    // copy plain text + 256-bit master key to x
+    // copy 128-bit plain text + 256-bit master key to x
     F(12)x[i]=((W*)s)[i];
 
     for(;;) {
-      // 1st part of ExpandKey, AddRoundKey
-      w=k[r%2?3:7];
-      F(4)w=(w&-256)|S(w),w=R(w,8),((W*)s)[i]=x[i]^k[(r%2)*4+i]; 
+      // 1st part of ExpandKey
+      w=k[r?3:7];
+      F(4)w=(w&-256)|S(w),w=R(w,8); 
       
       // AddConstant, update constant
-      if(!(r%2))w=R(w,8)^c,c=M(c);
-
-      // perform 2nd part of ExpandKey
-      F(4)w=k[(r%2)*4+i]^=w;
+      if(!r){
+        w=R(w,8)^c,c=M(c);
+      }
+      
+      // AddRoundKey, 2nd part of ExpandKey
+      F(4)((W*)s)[i]=x[i]^k[r*4+i], w=k[r*4+i]^=w;
       
       // if round 15, stop
-      if (r==14) break;
+      if(c==27) break;
       
-      // update round counter
-      r++;
+      r=(r+1)&1;
       
       // SubBytes and ShiftRows
       F(16)((B*)x)[(i%4)+(((i/4)-(i%4))%4)*4]=S(s[i]);
 
-      // if not round 15, MixColumns
-      if(r!=14)
+      // if not round 15, MixColumns    
+      if((c!=128) | r)
         F(4)w=x[i],x[i]=R(w,8)^R(w,16)^R(w,24)^M(R(w,8)^w);
     }
 }
