@@ -80,7 +80,7 @@ void encrypt(W l, B*c, B*p, B*k) {
     B t[48];
 
     // copy 256-bit master key to local buffer
-    F(8)t[i+16]=k[i];
+    F(32)t[i+16]=k[i];
 
     while(l) {
       // copy counter+nonce to local buffer
