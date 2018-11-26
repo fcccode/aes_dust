@@ -35,11 +35,19 @@
   </tr>
   <tr>
     <td>aes.c</td>
-    <td>C source</td>
+    <td>AES-128 C source</td>
+  </tr>
+  <tr>
+    <td>aes2.c</td>
+    <td>AES-256 C source</td>
   </tr>
   <tr>
     <td>test.c</td>
-    <td>Test unit with AES test vectors</td>
+    <td>Test unit for AES-128</td>
+  </tr>
+  <tr>
+    <td>test2.c</td>
+    <td>Test unit for AES-256</td>
   </tr>
   <tr>
     <td>tweet.c</td>
