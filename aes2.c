@@ -54,23 +54,15 @@ void E(B *s) {
       // 1st part of ExpandKey
       w=k[r?3:7];
       F(4)w=(w&-256)|S(w),w=R(w,8); 
-      
       // AddConstant, update constant
-      if(!r){
-        w=R(w,8)^c,c=M(c);
-      }
-      
+      if(!r)w=R(w,8)^c,c=M(c);
       // AddRoundKey, 2nd part of ExpandKey
       F(4)((W*)s)[i]=x[i]^k[r*4+i], w=k[r*4+i]^=w;
-      
       // if round 15, stop
       if(c==27) break;
-      
       r=(r+1)&1;
-      
       // SubBytes and ShiftRows
       F(16)((B*)x)[(i%4)+(((i/4)-(i%4))%4)*4]=S(s[i]);
-
       // if not round 15, MixColumns    
       if((c!=128) | r)
         F(4)w=x[i],x[i]=R(w,8)^R(w,16)^R(w,24)^M(R(w,8)^w);
