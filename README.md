@@ -1,12 +1,12 @@
-﻿<h4>AES-128 Block Cipher</h4>
+﻿<h4>AES Block Cipher</h4>
 
-<p>AES-dust is a compact Implementation of the AES-128 block cipher. There's support for Counter (CTR) and Electronic Codebook (ECB) modes of encryption.</p>
+<p>AES-dust is a compact Implementation of the AES block cipher with support for 128 and 256-bit keys. The modes of encryption supported are Counter (CTR) and Electronic Code Book (ECB).</p>
 
-<p>The code is intentionally optimized for size rather than speed making it suitable for resource constrained environments.</p>
+<p>All code is intentionally optimized for size rather than speed making it suitable for resource constrained environments.</p>
 
 <h4>Side channel attacks</h4>
 
-<p>AES was never intended to be resistant against side channel attacks. However, if you decide to use this code for an embedded project that requires a high level of security, first evaluate whether the code is sufficient against such attacks before using in your project.</p>
+<p>AES was never intended to be resistant against side channel attacks. However, if you decide to use this code for an embedded project that requires a high level of security, first evaluate whether the code is sufficient against such attacks before including in your project.</p>
 
 <h4>Files</h4>
 
@@ -19,27 +19,23 @@
   </tr>
   <tr>
     <td>ax.asm</td>
-    <td>x86 assembly</td>
+    <td>AES-128 in x86 assembly</td>
   </tr>
   <tr>
     <td>axx.asm</td>
-    <td>AMD64 assembly</td>
+    <td>AES-128 in AMD64 assembly</td>
   </tr>
   <tr>
     <td>ax.s</td>
-    <td>ARM32 assembly</td>
+    <td>AES-128 in ARM32 assembly</td>
   </tr>
   <tr>
     <td>axx.s</td>
-    <td>ARM64 assembly</td>
+    <td>AES-128 in ARM64 assembly</td>
   </tr>
   <tr>
     <td>aes.c</td>
-    <td>AES-128 C source</td>
-  </tr>
-  <tr>
-    <td>aes2.c</td>
-    <td>AES-256 C source</td>
+    <td>AES-128 and AES-256 in C</td>
   </tr>
   <tr>
     <td>test.c</td>
@@ -177,5 +173,5 @@ OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
-For more information, please refer to <http://unlicense.org/>
+For more information, please refer to http://unlicense.org/
 </pre>
