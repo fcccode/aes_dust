@@ -29,14 +29,14 @@
 typedef unsigned char B;
 typedef unsigned int W;
 // Multiplication over GF(2**8)
-W M(W x){
+W M(W x) {
     W t=x&0x80808080;
     return((x^t)*2)^((t>>7)*27);
 }
 // SubByte
-B S(B x){
+B S(B x) {
     B i,y,c;
-    if(x){
+    if(x) {
       for(c=i=0,y=1;--i;y=(!c&&y==x)?c=1:y,y^=M(y));
       x=y;F(4)x^=y=(y<<1)|(y>>7);
     }
@@ -44,13 +44,13 @@ B S(B x){
 }
 #ifndef AES256
 #define K_LEN 16 // 128-bit
-void E(B *s){
+void E(B *s) {
     W i,w,x[8],c=1,*k=(W*)&x[4];
 
     // copy 128-bit plain text + 128-bit master key to x
     F(8)x[i]=((W*)s)[i];
 
-    for(;;){
+    for(;;) {
       // AddRoundKey, 1st part of ExpandKey
       w=k[3];F(4)w=(w&-256)|S(w),w=R(w,8),((W*)s)[i]=x[i]^k[i];
       // AddConstant, 2nd part of ExpandKey
@@ -96,14 +96,14 @@ void E(B *s) {
 
 #ifdef CTR
 // encrypt using Counter (CTR) mode
-void encrypt(W l, B*c, B*p, B*k){
+void encrypt(W l, B*c, B*p, B*k) {
     W i,r;
     B t[K_LEN+16];
 
     // copy master key to local buffer
     F(K_LEN)t[i+16]=k[i];
 
-    while(l){
+    while(l) {
       // copy counter+nonce to local buffer
       F(16)t[i]=c[i];
       
