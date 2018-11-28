@@ -95,13 +95,13 @@
   </tr>
   <tr>
     <td>x86</td>
-    <td>538</td>
-    <td>715</td>
+    <td>524</td>
+    <td>701</td>
   </tr>
   <tr>
     <td>AMD64</td>
-    <td>481</td>
-    <td>712</td>
+    <td>451</td>
+    <td>682</td>
   </tr>
   <tr>
     <td>ARM32</td>

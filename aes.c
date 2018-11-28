@@ -51,10 +51,10 @@ void E(B *s) {
     F(8)x[i]=((W*)s)[i];
 
     for(;;) {
-      // AddRoundKey, 1st part of ExpandKey
-      w=k[3];F(4)w=(w&-256)|S(w),w=R(w,8),((W*)s)[i]=x[i]^k[i];
-      // AddConstant, 2nd part of ExpandKey
-      w=R(w,8)^c;F(4)w=k[i]^=w;
+      // 1st part of ExpandKey
+      w=k[3];F(4)w=(w&-256)|S(w),w=R(w,8);
+      // AddConstant, AddRoundKey, 2nd part of ExpandKey
+      w=R(w,8)^c;F(4)((W*)s)[i]=x[i]^k[i], w=k[i]^=w;
       // if round 11, stop
       if(c==108)break; 
       // update constant
@@ -106,17 +106,13 @@ void encrypt(W l, B*c, B*p, B*k) {
     while(l) {
       // copy counter+nonce to local buffer
       F(16)t[i]=c[i];
-      
       // encrypt t
       E(t);
-      
       // XOR plaintext with ciphertext
       r=l>16?16:l;
       F(r)p[i]^=t[i];
-      
       // update length + position
       l-=r;p+=r;
-      
       // update counter
       for(i=16;i>0;i--)
         if(++c[i-1])break;
