@@ -117,7 +117,7 @@ int main (void)
     bin2hex("ctr", ctr_tv, 16);
     bin2hex("plain", ctr_plain[i], 16);
     
-    encryptx(16,ctr_tv,ctr_plain[i],ctr_key);
+    encrypt(16,ctr_tv,ctr_plain[i],ctr_key);
     equ=(memcmp(ctr_plain[i],ctr_cipher[i],16)==0);
     
     bin2hex("cipher", ctr_plain[i], 16);

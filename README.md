@@ -34,8 +34,12 @@
     <td>AES-128 in ARM64 assembly</td>
   </tr>
   <tr>
+    <td>aesb.c</td>
+    <td>AES-128 in C for 8-bit architectures.</td>
+  </tr>
+  <tr>
     <td>aes.c</td>
-    <td>AES-128 and AES-256 in C</td>
+    <td>AES-128 and AES-256 in C for 32-bit / 64-bit architectures.</td>
   </tr>
   <tr>
     <td>test.c</td>
