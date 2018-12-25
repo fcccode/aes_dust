@@ -56,7 +56,7 @@ void E(B *s) {
       // update round constant
       rc=M(rc);
       // SubBytes and ShiftRows
-      F(16)x[(i%4)+(((W)(i/4)-(i%4))%4)*4]=S(s[i]);
+      F(16)x[(i&3)+(((W)(i/4)-(i&3))&3)*4]=S(s[i]);
       // if not round 11
       if(rc!=108) {
         // MixColumns
