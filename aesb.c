@@ -40,7 +40,7 @@ B S(B x) {
 }
 #define K_LEN 16 // 128-bit
 void E(B *s) {
-    B a,b,c,d,i,t,x[32],rc=1,*k=&x[16];
+    B a,b,c,d,i,j,t,x[32],rc=1,*k=&x[16];
     
     // copy 128-bit plain text + 128-bit master key to x
     F(32)x[i]=s[i];
@@ -51,22 +51,23 @@ void E(B *s) {
       // if round 11, stop
       if(rc==108)break;
       // ExpandKey
-      k[0]^=S(k[13])^rc,k[1]^=S(k[14]),
-      k[2]^=S(k[15]),k[3]^=S(k[12]);
-      for(i=4;i<16;i+=4)
-        k[i+0]^=k[i-4],k[i+1]^=k[i-3],
-        k[i+2]^=k[i-2],k[i+3]^=k[i-1];
+      F(4)k[i]^=S(k[12+((i-3)&3)]);k[0]^=rc;
+      F(16)k[i+4]^=k[i];
       // update round constant
       rc=M(rc);
       // SubBytes and ShiftRows
       F(16)x[(i%4)+(((W)(i/4)-(i%4))%4)*4]=S(s[i]);
       // if not round 11
-      if(rc!=108)
+      if(rc!=108) {
         // MixColumns
-        for(i=0;i<16;i+=4)
-          a=x[i],b=x[i+1],c=x[i+2],d=x[i+3],t=a^b^c^d,
-          x[i+0]^=t^M(a^b),x[i+1]^=t^M(b^c),
-          x[i+2]^=t^M(c^d),x[i+3]^=t^M(d^a);
+        for(i=0;i<16;i+=4) {
+          a=x[i],b=x[i+1],c=x[i+2],d=x[i+3];
+          for(j=0;j<4;j++) {
+            x[i+j]^=a^b^c^d^M(a^b);
+            t=a,a=b,b=c,c=d,d=t;
+          }
+        }
+      }
     }
 }
 
