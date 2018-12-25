@@ -52,11 +52,11 @@ void E(B *s) {
       if(rc==108)break;
       // ExpandKey
       F(4)k[i]^=S(k[12+((i-3)&3)]);k[0]^=rc;
-      F(16)k[i+4]^=k[i];
       // update round constant
       rc=M(rc);
       // SubBytes and ShiftRows
-      F(16)x[(i&3)+(((W)(i/4)-(i&3))&3)*4]=S(s[i]);
+      F(16)k[i+4]^=k[i], 
+        x[(i&3)+(((W)(i/4)-(i&3))&3)*4]=S(s[i]);
       // if not round 11
       if(rc!=108) {
         // MixColumns
