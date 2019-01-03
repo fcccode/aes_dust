@@ -40,7 +40,7 @@ B S(B x) {
 }
 #define K_LEN 16 // 128-bit
 void E(B *s) {
-    B a,b,c,d,i,j,t,x[32],rc=1,*k=&x[16];
+    B a,b,c,d,i,j,t,x[48],rc=1,*k=&x[16];
     
     // copy 128-bit plain text + 128-bit master key to x
     F(32)x[i]=s[i];
@@ -51,8 +51,9 @@ void E(B *s) {
       // if round 11, stop
       if(rc==108)break;
       // ExpandKey
-      F(4)k[i]^=S(k[12+((i-3)&3)]);k[0]^=rc;
-      // update round constant
+      F(4)k[i]^=S(k[12+((i-3)&3)]); 
+      // AddConstant, update
+      k[0]^=rc;
       rc=M(rc);
       // SubBytes and ShiftRows
       F(16)k[i+4]^=k[i], 
