@@ -57,7 +57,7 @@ void E(B *s) {
       rc=M(rc);
       // SubBytes and ShiftRows
       F(16)k[i+4]^=k[i], 
-        x[(i&3)+(((W)(i/4)-(i&3))&3)*4]=S(s[i]);
+        x[(i&3)+((((W)(i>>2)-(i&3))&3)<<2)]=S(s[i]);
       // if not round 11
       if(rc!=108) {
         // MixColumns
