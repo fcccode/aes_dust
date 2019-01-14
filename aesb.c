@@ -28,7 +28,7 @@
 typedef unsigned char B;
 typedef unsigned int W;
 // Multiplication over GF(2**8)
-#define M(x)(((x)<<1)^((((x)>>7)&1)*0x1b))
+#define M(x)(((x)<<1)^((-((x)>>7))&0x1b))
 // SubByte
 B S(B x) {
     B i,y,c;

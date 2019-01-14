@@ -48,7 +48,7 @@ M:
 // B SubByte(B x);
 // *****************************
 S:
-    str      lr, [sp, -16]!
+    str      x30, [sp, -16]!
     ands     w7, w13, 0xFF
     beq      SB2
 
@@ -77,14 +77,14 @@ SB2:
     mov      w10, 99
     eor      w7, w7, w10 
     bfxil    w13, w7, 0, 8
-    ldr      lr, [sp], 16
+    ldr      x30, [sp], 16
     ret
     
 // *****************************
 // void E(void *s);
 // *****************************
 E:
-    str      lr, [sp, -16]!
+    str      x30, [sp, -16]!
     sub      sp, sp, 32
     
     // copy plain text + master key to x
@@ -171,5 +171,5 @@ L4:
     b        L4
 L5:
     add      sp, sp, 32
-    ldr      lr, [sp], 16
+    ldr      x30, [sp], 16
     ret

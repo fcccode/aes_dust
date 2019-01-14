@@ -31,7 +31,7 @@ typedef unsigned int W;
 // Multiplication over GF(2**8)
 W M(W x) {
     W t=x&0x80808080;
-    return((x^t)*2)^((t>>7)*27);
+    return((x^t)<<1)^((-(t>>7))&0x1b);
 }
 // SubByte
 B S(B x) {

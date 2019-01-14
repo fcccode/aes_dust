@@ -38,11 +38,9 @@
 M:
     ldr      r7, =#0x80808080
     and      r7, r11, r7
-
     mov      r9, #27
     lsr      r6, r7, #7
     mul      r6, r6, r9
-
     eor      r7, r11, r7
     eor      r7, r6, r7, lsl #1
     bx       lr
